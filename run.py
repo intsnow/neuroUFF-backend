@@ -1,12 +1,12 @@
-from sistema import Sistema
-from ui_view import UI_View as UIV
+from neurouff.sistema import Sistema
+from neurouff.ui_view import UI_View as UIV
 
 
 def startMenu(sys: Sistema):
 
         while True:
             op = input(
-                "\n\t\t=== Menu NeuroUFF === \n" \
+                "\n\n\n\t\t=== Menu NeuroUFF === \n" \
                 "\n\t1. Cadastrar Novo Aluno " \
                 "\n\t2. Listar Alunos (Ler do Banco de Dados)" \
                 "\n\t3. Excluir Aluno (Pelo E-mail)"   \
@@ -17,7 +17,12 @@ def startMenu(sys: Sistema):
             match int(op):
 
                 case 1:
+
                     fill = int(input("\nRegistrar manualmente (1) ou automaticamente/dummy (2)? "))
+
+                    while fill not in (1,2):
+                        UIV.opcao_printErro()
+                        fill = int(input("\nRegistrar manualmente (1) ou automaticamente/dummy (2)? "))
 
                     if fill == 1:
                         dados = {"nome": " ", "email": " ",
@@ -31,7 +36,7 @@ def startMenu(sys: Sistema):
                     elif fill == 2:                        
                         dados = {"nome": "Ana", "email": "ana@email.com",
                                  "hash_senha": "anasenha", "curso": "S.I", 
-                                 "dataIngresso": "03/03/2026", "status": "Ativo"}
+                                 "dataIngresso": "03/03/2026", "status": "Ativo"}   
 
                     status, user = sys.registrar_novoUser(dados)
                     
@@ -58,13 +63,14 @@ def startMenu(sys: Sistema):
 
                     return 
                 
+def main():
+    sys = Sistema("neuro_uff.db")
 
-sys = Sistema("neuro_uff.db")
-
-if sys:
-    print("\Conectando de BD...")
-
-    startMenu(sys)
+    if sys:
+        print("\Conectando de BD...")
+        startMenu(sys)
 
 
-#    refazer inputs e outputs de dados somente no main, e livrar tal carga das demais classes.
+if __name__ == "__main__":
+    main()
+

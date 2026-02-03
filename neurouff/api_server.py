@@ -1,9 +1,9 @@
-from sistema import Sistema
+from neurouff.sistema import Sistema
 from flask import request, Flask, jsonify
 
 app = Flask(__name__)
 
-system = Sistema("neuro_uff.db", api_mode=True)
+system = Sistema("neuro_uff.db")
 
 @app.route("/login", methods=["POST"])
 def login():

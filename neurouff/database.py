@@ -1,5 +1,5 @@
 import sqlite3 as sql
-from user import User
+from neurouff.user import User
 
 class Database:
 
@@ -16,7 +16,7 @@ class Database:
 
             cursor.execute("PRAGMA journal_mode=OFF;")
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS user (                            
+                CREATE TABLE IF NOT EXISTS users (                            
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nome TEXT,
                     email TEXT NOT NULL UNIQUE,
@@ -30,15 +30,9 @@ class Database:
             conn.commit()
 
 
-    #   Insere valores dinamicamente, dado um usuario
+    #   Remoção do uso de "vars()"
     def addUser(self, user):
-        
-
-        dict_user = vars(user).copy()
-
-        if "id" in dict_user:
-            del dict_user["id"]
-
+        dict_user = user.to_dict()
 
         atributos = list(dict_user.keys())
         valores = list(dict_user.values())
@@ -46,14 +40,11 @@ class Database:
         atributos = ",".join(atributos)     #   Cria a tupla de atributos da lista_keys
         placeholders = ",".join(["?"]* len(valores))    # Cria "?, ?, ..., ?" para N valores
 
-
         sql = f"""
-            INSERT INTO user ({atributos})
+            INSERT INTO users ({atributos})
             VALUES ({placeholders})
         """
-
-       
-            
+    
         try:
             with self.start_conn() as conn:
                 cursor = conn.cursor()
@@ -71,20 +62,20 @@ class Database:
                 
 
     def rmv_user(self, user):
-
+        
         try:
             with self.start_conn() as conn:
 
                 sql = f"""
-                    DELETE from user WHERE email = ?
+                    DELETE from users WHERE email = ?
                 """
                 # user.email formatado como tupla
                 cursor = conn.cursor()
                 cursor.execute(sql, (user.email,))   
                 conn.commit()
                 
-            #  Rowcount retorna acima de zero, caso alguma mudança 
-            # tenha sido feita no BD, então retorna True se removeu, False se não encontrou
+            #  Rowcount possui valor acima de zero, caso alguma mudança 
+            # tenha sido feita no BD, retornando True se removeu, e False se não encontrou.
             return cursor.rowcount > 0
         
         except Exception:
@@ -97,7 +88,7 @@ class Database:
             with self.start_conn() as conn:
 
                 sql = """
-                    SELECT * FROM user WHERE email = ?   
+                    SELECT * FROM users WHERE email = ?   
                 """
 
                 cursor = conn.cursor()
@@ -105,7 +96,7 @@ class Database:
 
                 if row:
                     dict_row = dict(row)
-                    return User.inputDados(dict_row)
+                    return User.from_dict(dict_row)
                 
                 return None
             
@@ -113,13 +104,13 @@ class Database:
                 return None
 
 
-    #   Item lê-se User
+    #   Remoção de "inputDados()"
     def getAll_users(self):
-        
+
         try:
             with self.start_conn() as conn:
                 sql = """
-                    SELECT * FROM user    
+                    SELECT * FROM users   
                 """
                 #   Nao usou-se cursor por ser um simples
                 #   comando de operação rapida. Conn.execute() 
@@ -131,7 +122,7 @@ class Database:
 
                 for row in rows:
                     dict_row = dict(row)
-                    user = User.inputDados(dict_row)
+                    user = User.from_dict(dict_row)
                     lista_users.append(user)
 
             return lista_users
@@ -143,7 +134,7 @@ class Database:
     def verify_password(self, login, senha):
 
         with self.start_conn() as conn:
-            sql =  "SELECT * FROM user WHERE login = ? AND hash_senha = ?"
+            sql =  "SELECT * FROM users WHERE login = ? AND hash_senha = ?"
             cursor = conn.cursor()
             row = cursor.execute(sql, (login, senha)).fetchone()
 
@@ -157,7 +148,7 @@ class Database:
 
         with self.start_conn() as conn:
 
-            sql =  "SELECT email FROM user WHERE email = ? AND hash_senha = ?"
+            sql =  "SELECT email FROM users WHERE email = ? AND hash_senha = ?"
 
 
 
@@ -182,4 +173,3 @@ class Database:
             return False, e
 
                 
-# excluir os UIV e levar a responsabilidade ao main

@@ -1,5 +1,5 @@
-from database import Database 
-from user import User
+from neurouff.database import Database 
+from neurouff.user import User
 
 class Sistema:
 
@@ -8,26 +8,19 @@ class Sistema:
         self.db = self.connectBD()
 
 
-
     def connectBD(self):
         db = Database(self.dbName)        
         return db
 
 
-    
+    #   Uso de "from_dict()" no lugar de "inputDados()"
     def registrar_novoUser(self, dados):
+        user = User.from_dict(dados)
 
-        userTmp = self.db.getUser_byEmail(dados["email"])
+        if self.db.addUser(user):
+            return True, user
 
-        if not userTmp:
-            
-            user = User.inputDados(dados)
-        
-            if self.db.addUser(user):
-                # UIV.user_printStatus(True, user)
-                return True, user
-
-        return False
+        return False, None
     
 
     def coletarUser_porEmail(self, email):
@@ -35,7 +28,6 @@ class Sistema:
 
 
     def removerUser_porEmail(self, email):
-
         user = self.coletarUser_porEmail(email)
 
         if user and self.db.rmv_user(user):
@@ -48,7 +40,3 @@ class Sistema:
        return self.db.getAll_users()
 
        
-
-    
-        #   Refazer todo o input de dados no MAIN, e trazer um DICT "dados" pronto para uso ao registro => renomear metodo
-        #       como "registrar_novoUser(self, dados)"

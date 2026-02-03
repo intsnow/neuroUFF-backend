@@ -1,5 +1,4 @@
 
-
 class UI_View:
 
     @staticmethod
@@ -8,9 +7,6 @@ class UI_View:
             return input(f"\n\tDigite o {atributo} do User:\t")
 
         return input(f"\n\tDigite o {atributo} do usuário à sua remoção:\t")
-
-    # @staticmethod
-    # def user_remove():
 
 
     @staticmethod
@@ -22,7 +18,7 @@ class UI_View:
                 print(f"\nRegistro do user [{user.nome}] bem sucedido!  ")
 
             elif user and not status:
-                print(f"\Email JÁ cadastrado!! Falha ao adicionar novo usuário... Por favor, tente novamente!\n")
+                print(f"\nEmail JÁ cadastrado!! Falha ao adicionar novo usuário... Por favor, tente novamente!\n")
 
             else:            
                 print("\nERRO inesperado! Falha ao registrar...\n")
@@ -33,38 +29,28 @@ class UI_View:
                 print(f"\nExclusão do user [{user.nome}], com email [{user.email}] bem sucedida!  ")
 
             elif not user and not status:
-                print(f"\Email NÃO existente!! Falha ao remover usuário... Por favor, tente novamente!\n")
+                print(f"\nEmail NÃO existente!! Falha ao remover usuário... Por favor, tente novamente!\n")
 
             else:            
                 print("\nERRO inesperado! Falha ao excluir...\n")
-
 
 
     # Lista de users trazida do main
     @staticmethod
     def list_users(users):
 
-        # lista_users = db.getAll_users()
-        lista_users = users
-
-        if lista_users:
+        if users:
+            print("__"*30)
             print("\nUsuários carregados com sucesso!\n")
-            cont = 0
-
           
-            for user in lista_users:                
-                
-                print("__"*30)#len(dictUsers[user]))
+            for user in users:                
+                print("__"*30)
+                user_limpo = user.to_dict()
 
-                atributos = [atr for atr in vars(user).keys()]
-                valores = [val for val in vars(user).values()]
+                for atributo, valores in user_limpo.items():
+                    print(f"\n{atributo}:\t{valores}")
 
-                for i in range(len(atributos)):
-
-                    print(f"\n{atributos[i]}:\t{valores[i]}")
-
-            print("__"*30)#len(dictUsers[user]))
-            # cont += 1
+            print("__"*30)
 
         else:
             print("\n Lista de usuários não feita...")
@@ -74,10 +60,17 @@ class UI_View:
     def db_printExit():
         print("\nDesconexão bem sucedida!")
 
+
     @staticmethod
     def db_printBegin():
         print("\nConexão bem sucedida!")
 
+
     @staticmethod
     def db_printErro(e):
         print("\n\nErro ao conectar: ", type(e).__name__, "-", e)
+
+
+    @staticmethod
+    def opcao_printErro():
+        print("\n\tFalha ao selecionar opção! Por favor, redigite sua escolha...\t")

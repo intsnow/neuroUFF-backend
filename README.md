@@ -76,7 +76,3 @@ python run.py
 ---
 
 *Projeto de estudo focado em boas práticas de desenvolvimento backend.*
-
-```
-
-```

@@ -50,16 +50,33 @@ neurouff-backend/
 ├── run.py                # Ponto de Entrada da aplicação
 ├── neuro_uff.db          # Arquivo de banco de dados (Auto-gerado)
 └── CHANGELOG.md          # Registro de alterações e versões
-🚀 Como Rodar
-Clone o repositório:
 
-Bash
-git clone [https://github.com/seu-usuario/neuro-uff-backend.git](https://github.com/seu-usuario/neuro-uff-backend.git)
-cd neuro-uff-backend
-Execute o projeto: Necessário Python 3.10 ou superior.
+```
 
-Bash
+## 🚀 Como Rodar
+
+1. **Clone o repositório:**
+
+```bash
+git clone https://github.com/intsnow/neurouff-backend.git
+cd neurouff-backend
+
+```
+
+2. **Execute o projeto:**
+Necessário Python 3.10 ou superior.
+
+```bash
 python run.py
-Ao rodar, o sistema cria o banco de dados neuro_uff.db automaticamente.
 
-Projeto de estudo focado em boas práticas de desenvolvimento backend.
+```
+
+*Ao rodar, o sistema cria o banco de dados `neuro_uff.db` automaticamente.*
+
+---
+
+*Projeto de estudo focado em boas práticas de desenvolvimento backend.*
+
+```
+
+```
